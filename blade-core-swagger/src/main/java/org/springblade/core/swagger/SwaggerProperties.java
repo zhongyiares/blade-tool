@@ -21,6 +21,7 @@ import org.springblade.core.launch.constant.AppConstant;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,7 +36,8 @@ public class SwaggerProperties {
 	/**
 	 * swagger会解析的包路径
 	 **/
-	private List<String> basePackages = new ArrayList<>(Collections.singletonList(AppConstant.BASE_PACKAGES));
+//	private List<String> basePackages = new ArrayList<>(Collections.singletonList(AppConstant.BASE_PACKAGES));
+	private List<String> basePackages = Arrays.asList(AppConstant.BASE_PACKAGES,"com.pxv");
 	/**
 	 * swagger会解析的url规则
 	 **/
