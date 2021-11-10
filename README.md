@@ -4,7 +4,7 @@
    <img src="https://img.shields.io/badge/Spring%20Boot-2.5.2-blue.svg" alt="Downloads">
  </p>  
 
-## SpringBlade微服务开发平台(zy_dev2)
+## SpringBlade微服务开发平台(zy_dev3)
 * 采用前后端分离的模式，前端开源两个框架：[Sword](https://gitee.com/smallc/Sword) (基于 React、Ant Design)、[Saber](https://gitee.com/smallc/Saber) (基于 Vue、Element-UI)
 * 后端采用SpringCloud全家桶，并同时对其基础组件做了高度的封装，单独开源出一个框架：[BladeTool](https://github.com/chillzhuang/blade-tool)
 * [BladeTool](https://github.com/chillzhuang/blade-tool)已推送至Maven中央库，直接引入即可，减少了工程的臃肿，也可更注重于业务开发
