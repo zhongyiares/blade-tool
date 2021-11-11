@@ -1,39 +1,52 @@
 pipeline {
     agent any
-    parameters {
-        string(name:'TAG_NAME',defaultValue: '',description:'')
-        string(name:'DESC',defaultValue: '',description:'')
-    }
-
     environment {
-        DOCKER_CREDENTIAL_ID = 'dockerhub-id'
-        GITHUB_CREDENTIAL_ID = 'mayun'
-        KUBECONFIG_CREDENTIAL_ID = 'demo-kubeconfig'
-        REGISTRY = 'docker.io'
-        DOCKERHUB_NAMESPACE = 'zhongyiares'
-        GITHUB_ACCOUNT = 'zhongyiares'
-        APP_NAME = 'blade-auth'
+       modeName = "${JAR_NAME}"
+       branch = "${BRANCH}"
+	   mvn_zy = "/usr/local/apache-maven-3.8.3/bin/mvn"
     }
-
+	 parameters {
+        //string(name: 'HARBOR_HOST', defaultValue: 'https://harbor.oak.net.cn:8443', description: 'harbor仓库地址')
+        string(name: 'MODEL', defaultValue: 'only', description: '是否全部构建（all，only）')
+        string(name: 'JAR_NAME', defaultValue: 'pxv-report-app', description: '要构建镜像名')
+        string(name: 'BRANCH', defaultValue: 'pxv_server_dev', description: '要构建的分支')
+    }
     stages {
         stage ('checkout scm') {
          steps {
-            git branch: 'pxv_report_dev', credentialsId: '7c787475-4cfc-4957-9b84-945b468c4909', url: 'https://github.com/zhongyiares/blade-tool.git'
+            git branch: branch, credentialsId: '7c787475-4cfc-4957-9b84-945b468c4909', url: 'https://gitee.com/zhongyiares/SpringBlade.git'
          }
 
         }
-        stage('maven build') {
+        stage('maven build all') {
+			when { environment name: 'MODEL',value: 'all' }
         	steps{
         	    script {
         	        sh ''' export JAVA_HOME=/usr/local/jdk1.8.0_281
-                           /usr/local/apache-maven-3.8.3/bin/mvn clean install -Dmaven.test.skip=true
+                           $mvn_zy clean install -Dmaven.test.skip=true
                         '''
         	    }
         	}
         }
+		stage('maven build only') {
+			when { environment name: 'MODEL',value: 'only' }
+        	steps{
+                script {
+                     if (modeName == "blade-auth"){
+                        sh '$mvn_zy clean install  -pl  ${JAR_NAME}  -Dmaven.test.skip=true -Dfile.encoding=UTF-8 -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true'
+                     } else if (modeName == "blade-gateway"){
+                        sh '$mvn_zy clean install  -pl  ${JAR_NAME}  -Dmaven.test.skip=true -Dfile.encoding=UTF-8 -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true'
+                     }else if (modeName == "blade-develop"){
+                        sh '$mvn_zy clean install  -pl  blade-ops/${JAR_NAME}  -Dmaven.test.skip=true -Dfile.encoding=UTF-8 -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true'
+                     }else {
+                        sh '$mvn_zy clean install  -pl  blade-service-api/${JAR_NAME}-api,blade-service/${JAR_NAME}  -Dmaven.test.skip=true -Dfile.encoding=UTF-8 -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true'
+                     }
+                }
+        	}
+        }
         stage('deploy to dev') {
           steps {
-             sh 'echo "$TAG_NAME" '
+             sh 'echo "$modeName" '
           }
         }
 

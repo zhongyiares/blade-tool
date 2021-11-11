@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+    parameters {
+        string(name:'TAG_NAME',defaultValue: '',description:'')
+        string(name:'DESC',defaultValue: '',description:'')
+    }
+
+    environment {
+       modeName = "${JAR_NAME}"
+       branch = "${BRANCH}"
+    }
+	 parameters {
+        string(name: 'HARBOR_HOST', defaultValue: 'https://harbor.oak.net.cn:8443', description: 'harbor仓库地址')
+        string(name: 'MODEL', defaultValue: 'all', description: '是否全部构建（all，only）')
+        string(name: 'JAR_NAME', defaultValue: 'iot-admin', description: '要构建镜像名')
+        string(name: 'BRANCH', defaultValue: 'pxv_server_dev', description: '要构建的分支')
+    }
+
+    stages {
+        stage ('checkout scm') {
+         steps {
+            git branch: 'pxv_server_dev', credentialsId: '7c787475-4cfc-4957-9b84-945b468c4909', url: 'https://gitee.com/zhongyiares/SpringBlade.git'
+         }
+
+        }
+        stage('maven build all') {
+			when { environment name: 'MODEL',value: 'all' }
+        	steps{
+        	    script {
+        	        sh ''' export JAVA_HOME=/usr/local/jdk1.8.0_281
+                                    				       /usr/local/apache-maven-3.8.3/bin/mvn clean package -Dmaven.test.skip=true
+                        '''
+        	    }
+        	}
+        }
+		stage('maven build only') {
+			when { environment name: 'MODEL',value: 'only' }
+        	steps{
+                script {
+                     if (modeName == "blade-auth"){
+                        sh 'mvn clean install  -pl  ${JAR_NAME}  -Dmaven.test.skip=true -Dfile.encoding=UTF-8 -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true'
+                     } else if (modeName == "blade-gateway"){
+                        sh 'mvn clean install  -pl  ${JAR_NAME}  -Dmaven.test.skip=true -Dfile.encoding=UTF-8 -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true'
+                     }else if (modeName == "blade-develop"){
+                        sh 'mvn clean install  -pl  blade-ops/${JAR_NAME}  -Dmaven.test.skip=true -Dfile.encoding=UTF-8 -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true'
+                     }else {
+                        sh 'mvn clean install  -pl  blade-service-api/${JAR_NAME}-api,blade-service/${JAR_NAME}  -Dmaven.test.skip=true -Dfile.encoding=UTF-8 -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true'
+                     }
+                }
+        	}
+        }
+        stage('deploy to dev') {
+          steps {
+             sh 'echo "$TAG_NAME" '
+          }
+        }
+
+    }
+}
