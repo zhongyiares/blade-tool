@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+    parameters {
+        string(name:'TAG_NAME',defaultValue: '',description:'')
+        string(name:'DESC',defaultValue: '',description:'')
+    }
+
+    environment {
+        DOCKER_CREDENTIAL_ID = 'dockerhub-id'
+        GITHUB_CREDENTIAL_ID = 'mayun'
+        KUBECONFIG_CREDENTIAL_ID = 'demo-kubeconfig'
+        REGISTRY = 'docker.io'
+        DOCKERHUB_NAMESPACE = 'zhongyiares'
+        GITHUB_ACCOUNT = 'zhongyiares'
+        APP_NAME = 'blade-auth'
+    }
+
+    stages {
+        stage ('checkout scm') {
+         steps {
+            git branch: 'pxv_report_dev', credentialsId: '7c787475-4cfc-4957-9b84-945b468c4909', url: 'https://github.com/zhongyiares/blade-tool.git'
+         }
+
+        }
+        stage('maven build') {
+        	steps{
+        	    script {
+        	        sh ''' export JAVA_HOME=/usr/local/jdk1.8.0_281
+                           /usr/local/apache-maven-3.8.3/bin/mvn clean install -Dmaven.test.skip=true
+                        '''
+        	    }
+        	}
+        }
+        stage('deploy to dev') {
+          steps {
+             sh 'echo "$TAG_NAME" '
+          }
+        }
+
+    }
+}
