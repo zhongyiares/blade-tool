@@ -1,10 +1,10 @@
  <p align="center">
   <img src="https://img.shields.io/badge/license-LGPL%20v3-blue.svg" alt="Build Status">
-   <img src="https://img.shields.io/badge/Spring%20Cloud-2020-blue.svg" alt="Coverage Status">
-   <img src="https://img.shields.io/badge/Spring%20Boot-2.5.2-blue.svg" alt="Downloads">
+   <img src="https://img.shields.io/badge/Spring%20Cloud-2021-blue.svg" alt="Coverage Status">
+   <img src="https://img.shields.io/badge/Spring%20Boot-2.6.3-blue.svg" alt="Downloads">
  </p>  
 
-## SpringBlade微服务开发平台(zy_dev3)
+## SpringBlade微服务开发平台
 * 采用前后端分离的模式，前端开源两个框架：[Sword](https://gitee.com/smallc/Sword) (基于 React、Ant Design)、[Saber](https://gitee.com/smallc/Saber) (基于 Vue、Element-UI)
 * 后端采用SpringCloud全家桶，并同时对其基础组件做了高度的封装，单独开源出一个框架：[BladeTool](https://github.com/chillzhuang/blade-tool)
 * [BladeTool](https://github.com/chillzhuang/blade-tool)已推送至Maven中央库，直接引入即可，减少了工程的臃肿，也可更注重于业务开发
@@ -14,7 +14,7 @@
 * 极简封装了多租户底层，用更少的代码换来拓展性更强的SaaS多租户系统。
 * 借鉴OAuth2，实现了多终端认证系统，可控制子系统的token权限互相隔离。
 * 借鉴Security，封装了Secure模块，采用JWT做Token认证，可拓展集成Redis等细颗粒度控制方案。
-* 稳定生产了一年，经历了从 Camden -> Hoxton -> 2020 的技术架构，也经历了从fat jar -> docker -> k8s + jenkins的部署架构
+* 稳定生产了一年，经历了从 Camden -> Hoxton -> 2021 的技术架构，也经历了从fat jar -> docker -> k8s + jenkins的部署架构
 * 项目分包明确，规范微服务的开发模式，使包与包之间的分工清晰。
 
 ## 架构图
@@ -45,7 +45,8 @@ blade-tool
 * 交流二群：`751253339`(满)
 * 交流三群：`784729540`(满)
 * 交流四群：`1034621754`(满)
-* 交流五群：`946350912`
+* 交流五群：`946350912`(满)
+* 交流六群: `511624269`
 
 ## 在线演示
 * Sword演示地址：[https://sword.bladex.vip](https://sword.bladex.vip)
@@ -166,10 +167,4 @@ LGPL是GPL的一个为主要为类库使用设计的开源协议。和GPL要求�
 ## 鸣谢
 * mica（[Mica](https://github.com/lets-mica/mica)）
 * 如梦技术（[DreamLu](https://www.dreamlu.net/)）
-* pigx（[Pig Microservice](https://www.pig4cloud.com/zh-cn/)）
-* avue（[avue](https://avue.top/)）
-* gitee.ltd（[gitee.ltd](https://gitee.ltd/)）
-* 鲸宵（<a href="https://raw.githubusercontent.com/chillzhuang/blade-tool/master/pic/jx.png" target="_blank">鲸宵</a>）
-
-## 关注我们
-![](https://images.gitee.com/uploads/images/2019/0330/065148_f0ada806_410595.jpeg)
+* avue（[avue](https://avuejs.com/)）

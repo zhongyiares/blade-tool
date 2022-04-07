@@ -13,31 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springblade.core.tool.support.xss;
+package org.springblade.core.boot.tenant;
 
+import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
+import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import java.util.ArrayList;
-import java.util.List;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
- * Xss配置类
+ * 租户拦截器
  *
  * @author Chill
  */
 @Data
-@ConfigurationProperties("blade.xss")
-public class XssProperties {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class BladeTenantInterceptor extends TenantLineInnerInterceptor {
 
 	/**
-	 * 开启xss
+	 * 租户处理器
 	 */
-	private Boolean enabled = true;
+	private TenantLineHandler tenantLineHandler;
 
-	/**
-	 * 放行url
-	 */
-	private List<String> skipUrl = new ArrayList<>();
+	@Override
+	public void setTenantLineHandler(TenantLineHandler tenantLineHandler) {
+		super.setTenantLineHandler(tenantLineHandler);
+		this.tenantLineHandler = tenantLineHandler;
+	}
 
 }
