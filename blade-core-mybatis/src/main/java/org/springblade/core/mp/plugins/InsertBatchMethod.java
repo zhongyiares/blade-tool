@@ -9,10 +9,16 @@ import org.apache.ibatis.mapping.SqlSource;
 
 /**
  * 批量插入方法实现
+ * @author zhongyiares
  */
 @Slf4j
 public class InsertBatchMethod extends AbstractMethod {
-    @Override
+
+	public InsertBatchMethod(String methodName) {
+		super(methodName);
+	}
+
+	@Override
     public MappedStatement injectMappedStatement(Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
         final String sql = "<script>insert into %s %s values %s</script>";
         final String fieldSql = prepareFieldSql(tableInfo);

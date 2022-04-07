@@ -8,10 +8,15 @@ import org.apache.ibatis.mapping.SqlSource;
 
 /**
  * 批量更新方法实现，条件为主键，选择性更新
+ * @author zhongyiares
  */
 @Slf4j
 public class UpdateBatchMethod extends AbstractMethod {
-    @Override
+	public UpdateBatchMethod(String methodName) {
+		super(methodName);
+	}
+
+	@Override
     public MappedStatement injectMappedStatement(Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
         String sql = "<script>\n<foreach collection=\"list\" item=\"item\" separator=\";\">\nupdate %s %s where %s=#{%s} %s\n</foreach>\n</script>";
         String additional = tableInfo.isWithVersion() ? tableInfo.getVersionFieldInfo().getVersionOli("item", "item.") : "" + tableInfo.getLogicDeleteSql(true, true);
